@@ -1,0 +1,59 @@
+graph:
+{
+    private LineChart<Number, Number> lineChart;
+    private TextField zactek = new TextField();
+    private TextField konec = new TextField();
+
+    @Override
+    public void start(Stage stage) {
+        VBox root = new VBox();
+        NumberAxis xAxis = new NumberAxis();
+        NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("X");
+        yAxis.setLabel("sin(X)");
+
+        lineChart = new LineChart<>(xAxis, yAxis);
+        zactek.setText("0");
+        konec.setText("10");
+
+        Button make = new Button("Generate Graph");
+        make.setOnAction(e -> generate_graph());
+
+        HBox controls = new HBox(10, zactek, konec, make);
+        root.getChildren().addAll(lineChart, controls);
+
+        generate_graph();
+
+        Scene scene = new Scene(root, 800, 600);
+        stage.setScene(scene);
+        stage.setTitle("Sin Function Graph");
+        stage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    public void generate_graph() {
+        try {
+            double start = Double.parseDouble(zactek.getText());
+            double end = Double.parseDouble(konec.getText());
+
+            XYChart.Series<Number, Number> series = new XYChart.Series<>();
+            series.setName("sin(x)");
+
+            for (double x = start; x <= end; x += 0.1) {
+                series.getData().add(new XYChart.Data<>(x, Math.sin(x)));
+            }
+
+            lineChart.getData().clear();
+            lineChart.getData().add(series);
+        } catch (NumberFormatException e) {
+            System.err.println("err");
+        }
+    }
+}
+
+
+
+
