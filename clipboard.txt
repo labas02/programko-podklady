@@ -1,0 +1,57 @@
+ public static void main(String[] args) {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("JavaFX Clipboard Example");
+
+        // Create UI components
+        TextField textField = new TextField();
+        textField.setPromptText("Enter text to copy");
+
+        Button copyButton = new Button("Copy to Clipboard");
+        Button pasteButton = new Button("Paste from Clipboard");
+
+        TextArea resultArea = new TextArea();
+        resultArea.setEditable(false);
+        resultArea.setPromptText("Pasted text will appear here");
+
+        // Copy action
+        copyButton.setOnAction(e -> {
+            String text = textField.getText();
+            if (!text.isEmpty()) {
+                Clipboard clipboard = Clipboard.getSystemClipboard();
+                ClipboardContent content = new ClipboardContent();
+                content.putString(text);//can be replaced by file,url,image etc.
+                clipboard.setContent(content);
+                resultArea.setText("Copied to clipboard: " + text);
+            } else {
+                resultArea.setText("Please enter some text first");
+            }
+        });
+
+        // Paste action
+        pasteButton.setOnAction(e -> {
+            Clipboard clipboard = Clipboard.getSystemClipboard();
+            if (clipboard.hasString()) {
+                String text = clipboard.getString();
+                resultArea.setText("Pasted from clipboard:\n" + text);
+            } else {
+                resultArea.setText("Clipboard doesn't contain text");
+            }
+        });
+
+        // Layout
+        VBox root = new VBox(10);
+        root.getChildren().addAll(
+                textField,
+                copyButton,
+                pasteButton,
+                resultArea
+        );
+        root.setPadding(new javafx.geometry.Insets(10));
+
+        primaryStage.setScene(new Scene(root, 400, 300));
+        primaryStage.show();
+    }
