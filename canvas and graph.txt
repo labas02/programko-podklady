@@ -1,4 +1,3 @@
-graph:
 {
     private LineChart<Number, Number> lineChart;
     private TextField zactek = new TextField();
